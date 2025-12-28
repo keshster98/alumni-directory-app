@@ -7,4 +7,6 @@ sealed class Screen {
     @Serializable object Home: Screen()
 
     @Serializable object RegistrationForm: Screen()
+
+    @Serializable object Profile: Screen()
 }

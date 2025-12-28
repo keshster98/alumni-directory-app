@@ -1,5 +1,5 @@
 // kotlin
-package com.keshen.alumni_directory_app.ui.screens.form
+package com.keshen.alumni_directory_app.ui.screens.auth
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +49,15 @@ fun RegistrationFormScreen() {
                         value = "",
                         onValueChange = {},
                         label = { Text("Name") },
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(Modifier.height(20.dp))
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = {},
+                        label = { Text("Email") },
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                     )
