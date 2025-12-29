@@ -25,16 +25,12 @@ fun AppNav() {
         composable<Screen.SignIn> {
             SignInScreen(navController)
         }
-
         composable<Screen.SignUp> {
             SignUpScreen(navController)
         }
-
-        //test
         composable<Screen.RegistrationForm> {
             RegistrationFormScreen()
         }
-
         composable<Screen.Profile> {
             ProfileScreen()
         }
