@@ -24,14 +24,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        create("default") {
-            keyAlias = "Alumni_Directory_App"
-            keyPassword = "aaAA11..,,"
-            storeFile = file("$projectDir/keystore.jks")
-            storePassword = "aaAA11..,,"
-        }
-    }
+//    signingConfigs {
+//        create("default") {
+//            keyAlias = "Alumni_Directory_App"
+//            keyPassword = "aaAA11..,,"
+//            storeFile = file("$projectDir/keystore.jks")
+//            storePassword = "aaAA11..,,"
+//        }
+//    }
 
     buildTypes {
         release {
@@ -40,12 +40,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("default")
+//            signingConfig = signingConfigs.getByName("default")
         }
 
         debug {
             isDebuggable = true
-            signingConfig = signingConfigs.getByName("default")
+//            signingConfig = signingConfigs.getByName("default")
         }
     }
     compileOptions {
