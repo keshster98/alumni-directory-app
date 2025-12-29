@@ -18,7 +18,7 @@ fun AppNav() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.SignIn,
+        startDestination = Screen.UserProfile,
 
     ) {
         composable<Screen.Home> {
@@ -33,11 +33,9 @@ fun AppNav() {
         composable<Screen.RegistrationForm> {
             RegistrationFormScreen()
         }
-
         composable<Screen.AlumniProfile> {
             AlumniProfileScreen()
         }
-
         composable<Screen.UserProfile> {
             UserProfileScreen()
         }
