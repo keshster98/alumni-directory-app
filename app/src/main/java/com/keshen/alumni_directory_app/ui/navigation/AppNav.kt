@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.keshen.alumni_directory_app.data.model.User
 import com.keshen.alumni_directory_app.ui.screens.auth.RegistrationFormScreen
 import com.keshen.alumni_directory_app.ui.screens.auth.SignInScreen
 import com.keshen.alumni_directory_app.ui.screens.auth.SignUpScreen

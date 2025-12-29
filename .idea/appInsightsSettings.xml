@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.keshen.alumni_directory_app" />
+                  <option name="mobileSdkAppId" value="1:192855658694:android:05509755f2e15cfc7f87c7" />
+                  <option name="projectId" value="fc-cs2-alumni-directory-b8d44" />
+                  <option name="projectNumber" value="192855658694" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

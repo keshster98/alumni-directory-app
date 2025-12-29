@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "192855658694",
+    "project_id": "fc-cs2-alumni-directory-b8d44",
+    "storage_bucket": "fc-cs2-alumni-directory-b8d44.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192855658694:android:05509755f2e15cfc7f87c7",
+        "android_client_info": {
+          "package_name": "com.keshen.alumni_directory_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvAKuiyGTuGS9V6XCUB0SLQ7Xwyrj7rfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
