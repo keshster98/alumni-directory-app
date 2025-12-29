@@ -17,7 +17,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProfileScreen() {
+fun AlumniProfileScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
