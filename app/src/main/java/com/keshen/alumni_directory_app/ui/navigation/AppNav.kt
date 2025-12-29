@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.keshen.alumni_directory_app.data.model.User
 import com.keshen.alumni_directory_app.ui.screens.auth.RegistrationFormScreen
 import com.keshen.alumni_directory_app.ui.screens.home.HomeScreen
-import com.keshen.alumni_directory_app.ui.screens.profile.ProfileScreen
+import com.keshen.alumni_directory_app.ui.screens.profile.AlumniProfileScreen
+import com.keshen.alumni_directory_app.ui.screens.profile.UserProfileScreen
 
 @Composable
 fun AppNav() {
@@ -14,7 +16,7 @@ fun AppNav() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Home,
+        startDestination = Screen.UserProfile,
 
     ) {
         composable<Screen.Home> {
@@ -26,8 +28,12 @@ fun AppNav() {
             RegistrationFormScreen()
         }
 
-        composable<Screen.Profile> {
-            ProfileScreen()
+        composable<Screen.AlumniProfile> {
+            AlumniProfileScreen()
+        }
+
+        composable<Screen.UserProfile> {
+            UserProfileScreen()
         }
     }
 }
