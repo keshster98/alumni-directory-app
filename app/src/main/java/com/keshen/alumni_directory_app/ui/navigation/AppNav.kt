@@ -9,7 +9,6 @@ import com.keshen.alumni_directory_app.ui.screens.auth.SignInScreen
 import com.keshen.alumni_directory_app.ui.screens.auth.SignUpScreen
 import com.keshen.alumni_directory_app.ui.screens.home.HomeScreen
 import com.keshen.alumni_directory_app.ui.screens.profile.AlumniProfileScreen
-import com.keshen.alumni_directory_app.ui.screens.profile.UserProfileScreen
 
 @Composable
 fun AppNav() {
@@ -17,11 +16,11 @@ fun AppNav() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.UserProfile,
+        startDestination = Screen.Home,
 
     ) {
         composable<Screen.Home> {
-            HomeScreen(navController)
+            HomeScreen(navController,isAdmin = true)
         }
         composable<Screen.SignIn> {
             SignInScreen(navController)
@@ -32,13 +31,8 @@ fun AppNav() {
         composable<Screen.RegistrationForm> {
             RegistrationFormScreen()
         }
-
-        composable<Screen.AlumniProfile> {
+        composable<Screen.AlumniProfile>{
             AlumniProfileScreen()
-        }
-
-        composable<Screen.UserProfile> {
-            UserProfileScreen()
         }
     }
 }

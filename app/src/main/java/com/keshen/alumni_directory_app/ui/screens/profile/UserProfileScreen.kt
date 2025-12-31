@@ -26,63 +26,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-//@Composable
-//fun UserProfileScreen() {
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(24.dp)
-//    ) {
-//        LazyColumn(
-//            modifier = Modifier.fillMaxWidth(),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            item {
-////                AsyncImage(
-////                    model = ImageRequest
-////                        .Builder(context)
-////                        .data(user.photoUrl)
-////                        .build(),
-////                    "",
-////                    modifier = Modifier.fillMaxWidth(0.5f)
-////                        .aspectRatio(1f)
-////                        .clip(CircleShape)
-////                )
-//            }
-//
-//            item {
-//                ProfileSection(
-//                    color = android.R.color.holo_blue_light
-//                ) {
-//                    Text("Name")
-//                    Text("Email")
-//                    Text("Phone Number")
-//                }
-//            }
-//
-//            item {
-//                Spacer(modifier = Modifier.height(24.dp).fillMaxWidth())
-//                Button(
-//                    onClick = {},
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(52.dp),
-//                    shape = RoundedCornerShape(16.dp),
-//                    colors = ButtonDefaults.buttonColors(
-//                        containerColor = MaterialTheme.colorScheme.error,
-//                        contentColor = MaterialTheme.colorScheme.onError
-//                    )
-//
-//                ) {
-//                    Text("Sign-out")
-//                }
-//
-//            }
-//        }
-//    }
-//}
-
-
 @Composable
 fun UserProfileScreen() {
     LazyColumn(

@@ -90,25 +90,6 @@ fun AlumniProfileScreen() {
                     Text("Bio")
                 }
             }
-
-//            item {
-//                Spacer(modifier = Modifier.height(24.dp).fillMaxWidth())
-//                Button(
-//                    onClick = {},
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(52.dp),
-//                    shape = RoundedCornerShape(16.dp),
-//                    colors = ButtonDefaults.buttonColors(
-//                        containerColor = MaterialTheme.colorScheme.error,
-//                        contentColor = MaterialTheme.colorScheme.onError
-//                    )
-//
-//                ) {
-//                    Text("Sign-out")
-//                }
-//
-//            }
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.keshen.alumni_directory_app.data.model
 
-import androidx.compose.ui.input.pointer.PointerEventPass
 
 data class RegistrationForm (
+    val id: String,
     val fullName : String,
     val email: String,
     val password: String,

@@ -1,4 +1,3 @@
-// kotlin
 package com.keshen.alumni_directory_app.ui.screens.auth
 
 import androidx.compose.foundation.layout.Box
