@@ -1,22 +1,14 @@
 package com.keshen.alumni_directory_app.ui.screens.auth
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.keshen.alumni_directory_app.service.AuthService
 import kotlinx.coroutines.launch
 
@@ -30,44 +22,95 @@ fun SignUpScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
 
-    Column {
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") }
-        )
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation()
-        )
+            // 🔹 Title
+            Text(
+                text = "Sign Up",
+                fontSize = 24.sp,
+                style = MaterialTheme.typography.headlineSmall
+            )
 
-        Button(
-            onClick = {
-                scope.launch {
-                    runCatching {
-                        authService.signUp(email, password)
-                    }.onSuccess {
-                        onSuccess()
-                    }.onFailure {
-                        error = it.message
+            Spacer(Modifier.height(24.dp))
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            OutlinedTextField(
+                value = confirmPassword,
+                onValueChange = { confirmPassword = it },
+                label = { Text("Confirm Password") },
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    when {
+                        email.isBlank() || password.isBlank() || confirmPassword.isBlank() -> {
+                            error = "All fields are required"
+                        }
+                        password != confirmPassword -> {
+                            error = "Passwords do not match"
+                        }
+                        else -> {
+                            scope.launch {
+                                runCatching {
+                                    authService.signUp(email, password)
+                                }.onSuccess {
+                                    onSuccess()
+                                }.onFailure {
+                                    error = it.message
+                                }
+                            }
+                        }
                     }
                 }
+            ) {
+                Text("Sign Up")
             }
-        ) {
-            Text("Sign Up")
-        }
 
-        error?.let { Text(it, color = Color.Red) }
+            error?.let {
+                Spacer(Modifier.height(12.dp))
+                Text(it, color = Color.Red)
+            }
 
-        Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
-        TextButton(onClick = onSignInClick) {
-            Text("Already have an account? Sign In")
+            TextButton(onClick = onSignInClick) {
+                Text("Already have an account? Sign In")
+            }
         }
     }
 }
