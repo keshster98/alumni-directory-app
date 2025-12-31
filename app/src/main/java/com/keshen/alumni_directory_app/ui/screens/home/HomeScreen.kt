@@ -27,10 +27,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.keshen.alumni_directory_app.service.AuthService
+import com.keshen.alumni_directory_app.ui.navigation.Screen
 
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    authService: AuthService
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -65,6 +68,22 @@ fun HomeScreen(
                 }
 
             }
+
+        }
+        Button(
+            onClick = {
+                authService.signOut()
+
+                navController.navigate(Screen.SignIn) {
+                    popUpTo(0) { inclusive = true }
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text("Log Out")
         }
     }
 }
