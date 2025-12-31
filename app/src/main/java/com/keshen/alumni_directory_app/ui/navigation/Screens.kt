@@ -9,5 +9,6 @@ sealed class Screen {
     @Serializable object SignUp: Screen()
     @Serializable object RegistrationForm: Screen()
     @Serializable object AlumniProfile: Screen()
-    @Serializable object UserProfile: Screen()
+
+    @Serializable object Alumni: Screen()
 }

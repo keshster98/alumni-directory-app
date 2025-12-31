@@ -15,4 +15,10 @@ data class User(
     val bio: String = "",
     val profilePicture: String = "",
     val completed: Boolean = true
+    val isAdmin: Boolean = false,
+    val status: Status = Status.PENDING
 )
+
+enum class Status {
+    PENDING,REJECTED,APPROVED
+}
