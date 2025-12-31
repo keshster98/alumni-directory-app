@@ -14,7 +14,7 @@ data class User(
     val contact: String = "",
     val bio: String = "",
     val profilePicture: String = "",
-    val completed: Boolean = true
+    val completed: Boolean = true,
     val isAdmin: Boolean = false,
     val status: Status = Status.PENDING
 )

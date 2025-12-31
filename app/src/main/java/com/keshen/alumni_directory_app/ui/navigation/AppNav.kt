@@ -89,10 +89,6 @@ fun AppNav(
             HomeScreen(navController, authService = authService)
         }
 
-        composable<Screen.UserProfile> {
-            UserProfileScreen()
-        }
-
         composable<Screen.AlumniProfile> {
             AlumniProfileScreen()
         }
