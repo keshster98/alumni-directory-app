@@ -18,4 +18,12 @@ class UserProfileService(
             .set(profile)
             .await()
     }
+
+    suspend fun getApprovedUsers(): List<User> {
+        return db.collection("users")
+            .whereEqualTo("status", "PENDING")
+            .get()
+            .await()
+            .toObjects(User::class.java)
+    }
 }
