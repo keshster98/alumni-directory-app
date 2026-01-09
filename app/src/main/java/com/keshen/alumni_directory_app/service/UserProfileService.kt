@@ -7,6 +7,14 @@ import kotlinx.coroutines.tasks.await
 class UserProfileService(
     private val db: FirebaseFirestore
 ) {
+    suspend fun getUserDisplayName(uid: String, email: String): String {
+        val doc = db.collection("users").document(uid).get().await()
+
+        val fullName = doc.getString("fullName")
+
+        return fullName?.takeIf { it.isNotBlank() } ?: email
+    }
+
     suspend fun isProfileCompleted(uid: String): Boolean {
         val doc = db.collection("users").document(uid).get().await()
         return doc.exists() && doc.getBoolean("completed") == true
