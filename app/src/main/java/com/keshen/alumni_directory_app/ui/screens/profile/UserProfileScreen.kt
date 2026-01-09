@@ -25,17 +25,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.keshen.alumni_directory_app.data.model.User
 
 @Composable
-fun UserProfileScreen() {
+fun UserProfileScreen(
+    user: User,
+    viewerUid: String,
+    viewerIsAdmin: Boolean,
+    onSignOut: () -> Unit
+) {
+    val displayEmail = user.displayEmail(viewerIsAdmin = viewerIsAdmin, viewerUid = viewerUid)
+    val displayPhone = user.displayPhone(viewerIsAdmin = viewerIsAdmin, viewerUid = viewerUid)
+    val displayLinkedIn = user.displayLinkedIn(viewerIsAdmin = viewerIsAdmin, viewerUid = viewerUid)
+    val displayGithub = user.displayGithub(viewerIsAdmin = viewerIsAdmin, viewerUid = viewerUid)
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
-        // Profile picture
         item {
             Box(
                 modifier = Modifier
@@ -49,14 +58,12 @@ fun UserProfileScreen() {
                     style = MaterialTheme.typography.displaySmall
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Name
         item {
             Text(
-                text = "John Doe",
+                text = user.fullName.ifBlank { "Unknown" },
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -64,7 +71,7 @@ fun UserProfileScreen() {
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "john.doe@email.com",
+                text = displayEmail,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -72,20 +79,20 @@ fun UserProfileScreen() {
             Spacer(modifier = Modifier.height(24.dp))
         }
 
-        // Profile info card
         item {
             ProfileSection {
-                ProfileRow(label = "Email", value = "john.doe@email.com")
-                ProfileRow(label = "Phone", value = "+60 12-345 6789")
+                ProfileRow(label = "Email", value = displayEmail)
+                ProfileRow(label = "Phone", value = displayPhone)
+                ProfileRow(label = "LinkedIn", value = displayLinkedIn)
+                ProfileRow(label = "GitHub", value = displayGithub)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
         }
 
-        // Sign out button
         item {
             Button(
-                onClick = {  },
+                onClick = onSignOut,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),

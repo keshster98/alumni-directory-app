@@ -16,8 +16,30 @@ data class User(
     val profilePicture: String = "",
     val completed: Boolean = true,
     val isAdmin: Boolean = false,
-    val status: Status = Status.PENDING
-)
+    val status: Status = Status.PENDING,
+
+    // New profile fields
+    val linkedIn: String = "",
+    val github: String = "",
+
+    // Visibility controls (owner can toggle in registration form)
+    val showEmail: Boolean = true,
+    val showLinkedIn: Boolean = true,
+    val showGithub: Boolean = true,
+    val showPhone: Boolean = true,
+) {
+    fun displayEmail(viewerIsAdmin: Boolean, viewerUid: String): String =
+        if (viewerIsAdmin || viewerUid == uid || showEmail) email else "Hide"
+
+    fun displayLinkedIn(viewerIsAdmin: Boolean, viewerUid: String): String =
+        if (viewerIsAdmin || viewerUid == uid || showLinkedIn) linkedIn else "Hide"
+
+    fun displayGithub(viewerIsAdmin: Boolean, viewerUid: String): String =
+        if (viewerIsAdmin || viewerUid == uid || showGithub) github else "Hide"
+
+    fun displayPhone(viewerIsAdmin: Boolean, viewerUid: String): String =
+        if (viewerIsAdmin || viewerUid == uid || showPhone) contact else "Hide"
+}
 
 enum class Status {
     PENDING,REJECTED,APPROVED
