@@ -130,7 +130,7 @@ fun AppNav(
             RegistrationFormScreen(
                 authService = authService,
                 onCompleted = {
-                    rootNavController.navigate(Screen.Main) {
+                    rootNavController.navigate(Screen.Status) {
                         popUpTo(Screen.RegistrationForm) { inclusive = true }
                     }
                 }
