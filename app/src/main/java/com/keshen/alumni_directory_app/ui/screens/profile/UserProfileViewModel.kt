@@ -52,8 +52,6 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
-    /* ───── Dirty checks ───── */
-
     fun isWorkDirty(e: User) =
         originalUser?.let {
             e.jobTitle != it.jobTitle ||
@@ -79,8 +77,6 @@ class UserProfileViewModel @Inject constructor(
                     e.showLinkedIn != it.showLinkedIn ||
                     e.showGithub != it.showGithub
         } ?: false
-
-    /* ───── Save helpers ───── */
 
     fun saveWork(e: User) = savePartial {
         profileService.updateWorkInfo(e.uid, e.jobTitle, e.company, e.primaryTechStack)

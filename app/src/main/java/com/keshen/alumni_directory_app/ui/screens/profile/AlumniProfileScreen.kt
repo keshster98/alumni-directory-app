@@ -199,8 +199,6 @@ fun ContactIconRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-
-        // 📧 Email (always visible)
         IconButton(onClick = {
             val intent = Intent(
                 Intent.ACTION_SENDTO,
@@ -214,7 +212,6 @@ fun ContactIconRow(
             )
         }
 
-        // 📞 Phone
         phone?.let {
             IconButton(onClick = {
                 val intent = Intent(
@@ -230,7 +227,6 @@ fun ContactIconRow(
             }
         }
 
-        // 🔗 LinkedIn
         linkedin?.let {
             IconButton(onClick = {
                 val intent = Intent(
@@ -246,7 +242,6 @@ fun ContactIconRow(
             }
         }
 
-        // 🐙 GitHub
         github?.let {
             IconButton(onClick = {
                 val intent = Intent(

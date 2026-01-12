@@ -13,7 +13,6 @@ import javax.inject.Inject
 class AdminDashboardViewModel @Inject constructor(
     private val profileService: UserProfileService
 ) : ViewModel() {
-
     private var allUsers: List<User> = emptyList()
 
     val users = MutableStateFlow<List<User>>(emptyList())
@@ -34,7 +33,9 @@ class AdminDashboardViewModel @Inject constructor(
     val selectedYear = MutableStateFlow<Int?>(null)
     val selectedStatus = MutableStateFlow<String?>(null)
 
-    init { loadUsers() }
+    init {
+        loadUsers()
+    }
 
     private fun loadUsers() {
         viewModelScope.launch {

@@ -14,4 +14,5 @@ sealed class Screen {
     @Serializable object RegistrationForm: Screen()
     @Serializable object Status : Screen()
     @Serializable data class AlumniProfile(val uid: String): Screen()
+    @Serializable data class AdminAlumniEdit(val uid: String): Screen()
 }

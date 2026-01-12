@@ -19,6 +19,5 @@ class AuthService(
     fun uid(): String = auth.currentUser!!.uid
 
     fun email(): String = auth.currentUser!!.email!!
-
     fun signOut() = auth.signOut()
 }

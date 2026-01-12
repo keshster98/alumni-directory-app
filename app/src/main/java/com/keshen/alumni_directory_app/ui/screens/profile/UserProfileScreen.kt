@@ -144,8 +144,6 @@ fun UserProfileScreen(
     }
 }
 
-/* ───────────────────────── UI HELPERS ───────────────────────── */
-
 @Composable
 private fun SectionTitle(title: String) {
     Text(
@@ -262,8 +260,6 @@ fun ContactIconRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-
-        // 📧 Email (always visible)
         IconButton(
             onClick = {
                 val intent = Intent(
@@ -279,7 +275,6 @@ fun ContactIconRow(
             )
         }
 
-        // 📞 Phone
         if (user.showPhone && user.phone.isNotBlank()) {
             IconButton(
                 onClick = {
@@ -297,7 +292,6 @@ fun ContactIconRow(
             }
         }
 
-        // 🔗 LinkedIn
         if (user.showLinkedIn && user.linkedIn.isNotBlank()) {
             IconButton(
                 onClick = {
@@ -315,7 +309,6 @@ fun ContactIconRow(
             }
         }
 
-        // 🐙 GitHub
         if (user.showGithub && user.github.isNotBlank()) {
             IconButton(
                 onClick = {
