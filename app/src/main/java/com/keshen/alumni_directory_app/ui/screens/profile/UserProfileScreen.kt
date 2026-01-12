@@ -73,12 +73,16 @@ fun UserProfileScreen(
                 CardSection {
                     InfoRow("Full Name", edit!!.fullName)
                     InfoRow("Email", edit!!.email)
+                    InfoRow("Graduation Year", edit!!.graduationYear.toString())
+                    InfoRow("Department", edit!!.department)
                 }
             }
 
             item { SectionTitle("Academic Information") }
             item {
                 CardSection {
+                    InfoRow("Full Name", edit!!.fullName)
+                    InfoRow("Email", edit!!.email)
                     InfoRow("Graduation Year", edit!!.graduationYear.toString())
                     InfoRow("Department", edit!!.department)
                 }

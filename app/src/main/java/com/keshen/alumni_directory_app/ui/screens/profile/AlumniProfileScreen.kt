@@ -1,216 +1,266 @@
 package com.keshen.alumni_directory_app.ui.screens.profile
-//
-//import android.content.ActivityNotFoundException
-//import android.content.Intent
-//import android.net.Uri
-//import androidx.compose.foundation.background
-//import androidx.compose.foundation.clickable
-//import androidx.compose.foundation.layout.Box
-//import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.ColumnScope
-//import androidx.compose.foundation.layout.fillMaxSize
-//import androidx.compose.foundation.layout.fillMaxWidth
-//import androidx.compose.foundation.layout.padding
-//import androidx.compose.foundation.lazy.LazyColumn
-//import androidx.compose.foundation.shape.RoundedCornerShape
-//import androidx.compose.material3.MaterialTheme
-//import androidx.compose.material3.Text
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.platform.LocalContext
-//import androidx.compose.ui.res.colorResource
-//import androidx.compose.ui.text.style.TextOverflow
-//import androidx.compose.ui.unit.dp
-//import com.keshen.alumni_directory_app.data.model.User
-//
-//@Composable
-//fun AlumniProfileScreen(
-//    user: User,
-//    viewerUid: String,
-//    viewerIsAdmin: Boolean
-//) {
-//    val context = LocalContext.current
-//
-//    val displayEmail = user.displayEmail(viewerIsAdmin = viewerIsAdmin, viewerUid = viewerUid)
-//    val displayPhone = user.displayPhone(viewerIsAdmin = viewerIsAdmin, viewerUid = viewerUid)
-//    val displayLinkedIn = user.displayLinkedIn(viewerIsAdmin = viewerIsAdmin, viewerUid = viewerUid)
-//    val displayGithub = user.displayGithub(viewerIsAdmin = viewerIsAdmin, viewerUid = viewerUid)
-//
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(24.dp)
-//    ) {
-//        LazyColumn(
-//            modifier = Modifier.fillMaxWidth(),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            item {
-//                // Optional: profile picture block (kept commented in your original)
-//            }
-//
-//            item {
-//                ProfileSection(
-//                    color = android.R.color.holo_blue_light
-//                ) {
-//                    Text("Name: ${user.fullName.ifBlank { "Unknown" }}")
-//                    Text("Graduation Year: ${user.graduationYear}")
-//                    Text("Department: ${user.department.ifBlank { "-" }}")
-//                }
-//            }
-//
-//            item {
-//                ProfileSection(
-//                    color = android.R.color.holo_green_light
-//                ) {
-//                    Text("Current Job Title: ${user.jobTitle.ifBlank { "-" }}")
-//                    Text("Company: ${user.company.ifBlank { "-" }}")
-//                    Text("Tech Stack: ${user.techStack.ifBlank { "-" }}")
-//                }
-//            }
-//
-//            item {
-//                ProfileSection(
-//                    color = android.R.color.system_secondary_light
-//                ) {
-//                    Text("City: ${user.city.ifBlank { "-" }}")
-//                    Text("Country: ${user.country.ifBlank { "-" }}")
-//                }
-//            }
-//
-//            item {
-//                ProfileSection(color = android.R.color.holo_orange_light) {
-//                    ContactRow(
-//                        label = "Email",
-//                        value = displayEmail,
-//                        enabled = isActionableDisplayValue(displayEmail),
-//                        onClick = {
-//                            launchSafe(context, mailtoIntent(displayEmail))
-//                        }
-//                    )
-//                    ContactRow(
-//                        label = "Phone",
-//                        value = displayPhone,
-//                        enabled = isActionableDisplayValue(displayPhone),
-//                        onClick = {
-//                            launchSafe(context, dialIntent(displayPhone))
-//                        }
-//                    )
-//                    ContactRow(
-//                        label = "LinkedIn",
-//                        value = displayLinkedIn,
-//                        enabled = isActionableDisplayValue(displayLinkedIn),
-//                        onClick = {
-//                            launchSafe(context, viewUrlIntent(displayLinkedIn))
-//                        }
-//                    )
-//                    ContactRow(
-//                        label = "GitHub",
-//                        value = displayGithub,
-//                        enabled = isActionableDisplayValue(displayGithub),
-//                        onClick = {
-//                            launchSafe(context, viewUrlIntent(displayGithub))
-//                        }
-//                    )
-//                }
-//
-////            item {
-////                ProfileSection(
-////                    color = android.R.color.holo_red_light
-////                ) {
-////                    Text("Past Job History: -")
-////                    Text("Skills / Tags: -")
-////                    Text("Bio: ${user.bio.ifBlank { "-" }}")
-////                }
-////            }
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//private fun ContactRow(
-//    label: String,
-//    value: String,
-//    enabled: Boolean,
-//    onClick: () -> Unit,
-//    modifier: Modifier = Modifier
-//) {
-//    Column(
-//        modifier = modifier
-//            .fillMaxWidth()
-//            .clickable(enabled = enabled) { onClick() }
-//            .padding(vertical = 6.dp)
-//    ) {
-//        Text(
-//            text = label,
-//            style = MaterialTheme.typography.labelMedium
-//        )
-//        Text(
-//            text = value.ifBlank { "-" },
-//            style = MaterialTheme.typography.bodyLarge,
-//            maxLines = 1,
-//            overflow = TextOverflow.Ellipsis,
-//            color = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-//        )
-//    }
-//}
-//
-//private fun isActionableDisplayValue(value: String): Boolean {
-//    val v = value.trim()
-//    if (v.isEmpty()) return false
-//    val lowered = v.lowercase()
-//    if (lowered == "hide") return false
-//    if (lowered == "-") return false
-//    return true
-//}
-//
-//private fun mailtoIntent(email: String): Intent {
-//    return Intent(Intent.ACTION_SENDTO).apply {
-//        data = Uri.parse("mailto:${email.trim()}")
-//        putExtra(Intent.EXTRA_EMAIL, arrayOf(email.trim()))
-//    }
-//}
-//
-//private fun dialIntent(phone: String): Intent {
-//    val normalized = phone.trim()
-//    return Intent(Intent.ACTION_DIAL).apply {
-//        data = Uri.parse("tel:$normalized")
-//    }
-//}
-//
-//private fun viewUrlIntent(rawUrl: String): Intent {
-//    val trimmed = rawUrl.trim()
-//    val url = if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) trimmed else "https://$trimmed"
-//    return Intent(Intent.ACTION_VIEW, Uri.parse(url))
-//}
-//
-//private fun launchSafe(context: android.content.Context, intent: Intent) {
-//    try {
-//        context.startActivity(intent)
-//    } catch (_: ActivityNotFoundException) {
-//        // No handler installed; ignore.
-//    }
-//}
-//
-//
-//@Composable
-//fun ProfileSection(
-//    color: Int,
-//    content: @Composable ColumnScope.() -> Unit
-//) {
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(vertical = 8.dp)
-//            .background(
-//                color = colorResource(id = color),
-//                shape = RoundedCornerShape(16.dp)
-//            )
-//            .padding(16.dp)
-//    ) {
-//        content()
-//    }
-//}
-//
+
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavController
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AlumniProfileScreen(
+    uid: String,
+    navController: NavController,
+    viewModel: AlumniProfileViewModel = hiltViewModel()
+) {
+    val user by viewModel.user.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
+
+    LaunchedEffect(uid) {
+        viewModel.load(uid)
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Alumni Profile") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBackIosNew,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            )
+        }
+    ) { padding ->
+
+        when {
+            isLoading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            error != null -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(error!!)
+                }
+            }
+
+            user != null -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(padding)
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+
+                    item { SectionTitle("Profile Information") }
+                    item {
+                        CardSection {
+                            InfoRow("Full Name", user!!.fullName)
+                            InfoRow("Email", user!!.email)
+                        }
+                    }
+
+                    item { SectionTitle("Academic Information") }
+                    item {
+                        CardSection {
+                            InfoRow("Graduation Year", user!!.graduationYear.toString())
+                            InfoRow("Department", user!!.department)
+                        }
+                    }
+
+                    item { SectionTitle("Work Information") }
+                    item {
+                        CardSection {
+                            InfoRow("Job Title", user!!.jobTitle)
+                            InfoRow("Company", user!!.company)
+                            InfoRow("Tech Stack", user!!.primaryTechStack)
+                        }
+                    }
+
+                    item { SectionTitle("Location") }
+                    item {
+                        CardSection {
+                            InfoRow("City", user!!.city)
+                            InfoRow("Country", user!!.country)
+                        }
+                    }
+
+                    item { SectionTitle("Contact") }
+                    item {
+                        CardSection {
+                            ContactIconRow(
+                                email = user!!.email,
+                                phone = user!!.phone.takeIf { user!!.showPhone },
+                                linkedin = user!!.linkedIn.takeIf { user!!.showLinkedIn },
+                                github = user!!.github.takeIf { user!!.showGithub }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SectionTitle(title: String) {
+    Text(
+        text = title,
+        style = MaterialTheme.typography.titleMedium
+    )
+}
+
+@Composable
+private fun CardSection(
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            content = content
+        )
+    }
+}
+
+@Composable
+private fun InfoRow(
+    label: String,
+    value: String
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(label, style = MaterialTheme.typography.bodyMedium)
+        Text(value, style = MaterialTheme.typography.bodyMedium)
+    }
+}
+
+@Composable
+fun ContactIconRow(
+    email: String,
+    phone: String?,
+    linkedin: String?,
+    github: String?
+) {
+    val context = LocalContext.current
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+
+        // 📧 Email (always visible)
+        IconButton(onClick = {
+            val intent = Intent(
+                Intent.ACTION_SENDTO,
+                Uri.parse("mailto:$email")
+            )
+            context.startActivity(intent)
+        }) {
+            Icon(
+                imageVector = Icons.Filled.Email,
+                contentDescription = "Email"
+            )
+        }
+
+        // 📞 Phone
+        phone?.let {
+            IconButton(onClick = {
+                val intent = Intent(
+                    Intent.ACTION_DIAL,
+                    Uri.parse("tel:$it")
+                )
+                context.startActivity(intent)
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Phone,
+                    contentDescription = "Phone"
+                )
+            }
+        }
+
+        // 🔗 LinkedIn
+        linkedin?.let {
+            IconButton(onClick = {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(it)
+                )
+                context.startActivity(intent)
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Link,
+                    contentDescription = "LinkedIn"
+                )
+            }
+        }
+
+        // 🐙 GitHub
+        github?.let {
+            IconButton(onClick = {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(it)
+                )
+                context.startActivity(intent)
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Link,
+                    contentDescription = "GitHub"
+                )
+            }
+        }
+    }
+}
+

@@ -1,6 +1,7 @@
 package com.keshen.alumni_directory_app.service
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.keshen.alumni_directory_app.data.model.Status
 import com.keshen.alumni_directory_app.data.model.User
 import kotlinx.coroutines.tasks.await
 
@@ -105,4 +106,12 @@ class UserProfileService(
         return doc.getBoolean("admin") == true
     }
 
+    suspend fun getUserStatus(uid: String): Status {
+        val doc = db.collection("users").document(uid).get().await()
+        val status = doc.getString("status") ?: Status.PENDING.name
+        return Status.valueOf(status)
+    }
+
+    suspend fun getAllUsers(): List<User> =
+        db.collection("users").get().await().toObjects(User::class.java)
 }
