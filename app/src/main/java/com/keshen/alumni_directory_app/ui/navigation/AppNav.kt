@@ -11,6 +11,8 @@ import androidx.navigation.toRoute
 import com.keshen.alumni_directory_app.data.model.Status
 import com.keshen.alumni_directory_app.service.AuthService
 import com.keshen.alumni_directory_app.service.UserProfileService
+import com.keshen.alumni_directory_app.ui.screens.admin.AdminAlumniEditScreen
+import com.keshen.alumni_directory_app.ui.screens.admin.AdminDashboardScreen
 import com.keshen.alumni_directory_app.ui.screens.auth.*
 import com.keshen.alumni_directory_app.ui.screens.home.HomeScreen
 import com.keshen.alumni_directory_app.ui.screens.profile.AlumniProfileScreen
@@ -82,6 +84,15 @@ fun AppNav(
             val screen = backStackEntry.toRoute<Screen.AlumniProfile>()
 
             AlumniProfileScreen(
+                uid = screen.uid,
+                navController = rootNavController
+            )
+        }
+
+        composable<Screen.AdminAlumniEdit> { backStackEntry ->
+            val screen = backStackEntry.toRoute<Screen.AdminAlumniEdit>()
+
+            AdminAlumniEditScreen(
                 uid = screen.uid,
                 navController = rootNavController
             )
@@ -201,7 +212,7 @@ fun AppNav(
                         )
                     }
                     composable<Screen.Admin> {
-                        Text("Admin Dashboard")
+                        AdminDashboardScreen(navController = rootNavController)
                     }
                 }
             }

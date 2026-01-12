@@ -9,6 +9,5 @@ plugins {
 
     // Serialization version needs to match Kotlin version in libs.versions.toml
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.0" apply false
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21" apply false
     alias(libs.plugins.google.gms.google.services) apply false
 }
