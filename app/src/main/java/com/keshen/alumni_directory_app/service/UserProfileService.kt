@@ -7,6 +7,71 @@ import kotlinx.coroutines.tasks.await
 class UserProfileService(
     private val db: FirebaseFirestore
 ) {
+    suspend fun getProfile(uid: String): User {
+        val doc = db.collection("users")
+            .document(uid)
+            .get()
+            .await()
+
+        if (!doc.exists()) {
+            throw IllegalStateException("Profile not found")
+        }
+
+        return doc.toObject(User::class.java)
+            ?: throw IllegalStateException("Failed to parse profile")
+    }
+
+    suspend fun updateWorkInfo(
+        uid: String,
+        jobTitle: String,
+        company: String,
+        techStack: String
+    ) {
+        db.collection("users").document(uid).update(
+            mapOf(
+                "jobTitle" to jobTitle,
+                "company" to company,
+                "primaryTechStack" to techStack
+            )
+        ).await()
+    }
+
+    suspend fun updateLocation(uid: String, city: String, country: String) {
+        db.collection("users").document(uid).update(
+            mapOf("city" to city, "country" to country)
+        ).await()
+    }
+
+    suspend fun updateContact(
+        uid: String,
+        phone: String,
+        github: String,
+        linkedin: String
+    ) {
+        db.collection("users").document(uid).update(
+            mapOf(
+                "phone" to phone,
+                "github" to github,
+                "linkedIn" to linkedin
+            )
+        ).await()
+    }
+
+    suspend fun updateVisibility(
+        uid: String,
+        showPhone: Boolean,
+        showLinkedIn: Boolean,
+        showGithub: Boolean
+    ) {
+        db.collection("users").document(uid).update(
+            mapOf(
+                "showPhone" to showPhone,
+                "showLinkedIn" to showLinkedIn,
+                "showGithub" to showGithub
+            )
+        ).await()
+    }
+
     suspend fun getUserDisplayName(uid: String, email: String): String {
         val doc = db.collection("users").document(uid).get().await()
 
@@ -29,9 +94,15 @@ class UserProfileService(
 
     suspend fun getApprovedUsers(): List<User> {
         return db.collection("users")
-            .whereEqualTo("status", "PENDING")
+            .whereEqualTo("status", "APPROVED")
             .get()
             .await()
             .toObjects(User::class.java)
     }
+
+    suspend fun isAdmin(uid: String): Boolean {
+        val doc = db.collection("users").document(uid).get().await()
+        return doc.getBoolean("admin") == true
+    }
+
 }

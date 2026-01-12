@@ -65,7 +65,7 @@ class SignUpViewModel @Inject constructor(
                 authService.signUp(email, password)
             }.onSuccess {
                 _message.value = UiMessage(
-                    "Account created successfully, redirecting you to the sign in page.",
+                    "Account created successfully! Redirecting you to the registration form",
                     MessageType.SUCCESS
                 )
                 delay(2000)

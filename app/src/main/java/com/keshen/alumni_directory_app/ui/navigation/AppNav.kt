@@ -1,57 +1,58 @@
 package com.keshen.alumni_directory_app.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.*
 import com.keshen.alumni_directory_app.service.AuthService
 import com.keshen.alumni_directory_app.service.UserProfileService
-import com.keshen.alumni_directory_app.ui.screens.auth.RegistrationFormScreen
-import com.keshen.alumni_directory_app.ui.screens.auth.SignInScreen
-import com.keshen.alumni_directory_app.ui.screens.auth.SignUpScreen
+import com.keshen.alumni_directory_app.ui.screens.auth.*
 import com.keshen.alumni_directory_app.ui.screens.home.HomeScreen
-import com.keshen.alumni_directory_app.ui.screens.profile.AlumniProfileScreen
+import com.keshen.alumni_directory_app.ui.screens.profile.UserProfileScreen
 
 @Composable
 fun AppNav(
     authService: AuthService,
     profileService: UserProfileService
 ) {
-    val navController = rememberNavController()
+    val rootNavController = rememberNavController()
+    val isAdmin = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         if (authService.isLoggedIn()) {
             val completed = profileService.isProfileCompleted(authService.uid())
-
-            navController.navigate(
-                if (completed) Screen.Home else Screen.RegistrationForm
+            isAdmin.value = profileService.isAdmin(authService.uid())
+            rootNavController.navigate(
+                if (completed) Screen.Main else Screen.RegistrationForm
             ) {
                 popUpTo(0)
             }
         } else {
-            navController.navigate(Screen.SignIn) {
+            rootNavController.navigate(Screen.SignIn) {
                 popUpTo(0)
             }
         }
     }
 
     NavHost(
-        navController = navController,
+        navController = rootNavController,
         startDestination = Screen.SignIn
     ) {
 
         composable<Screen.SignIn> {
             SignInScreen(
                 onSuccess = { completed ->
-                    navController.navigate(
-                        if (completed) Screen.Home else Screen.RegistrationForm
+                    rootNavController.navigate(
+                        if (completed) Screen.Main else Screen.RegistrationForm
                     ) {
                         popUpTo(Screen.SignIn) { inclusive = true }
                     }
                 },
                 onSignUpClick = {
-                    navController.navigate(Screen.SignUp)
+                    rootNavController.navigate(Screen.SignUp)
                 }
             )
         }
@@ -59,12 +60,12 @@ fun AppNav(
         composable<Screen.SignUp> {
             SignUpScreen(
                 onSuccess = {
-                    navController.navigate(Screen.RegistrationForm) {
+                    rootNavController.navigate(Screen.RegistrationForm) {
                         popUpTo(Screen.SignUp) { inclusive = true }
                     }
                 },
                 onSignInClick = {
-                    navController.navigate(Screen.SignIn)
+                    rootNavController.navigate(Screen.SignIn)
                 }
             )
         }
@@ -72,21 +73,90 @@ fun AppNav(
         composable<Screen.RegistrationForm> {
             RegistrationFormScreen(
                 authService = authService,
-                profileService = profileService,
                 onCompleted = {
-                    navController.navigate(Screen.Home) {
+                    rootNavController.navigate(Screen.Main) {
                         popUpTo(Screen.RegistrationForm) { inclusive = true }
                     }
                 }
             )
         }
 
-        composable<Screen.Home> {
-            HomeScreen(navController, authService = authService)
-        }
+        composable<Screen.Main> {
+            val bottomNavController = rememberNavController()
 
-        composable<Screen.AlumniProfile> {
-            AlumniProfileScreen()
+            Scaffold(
+                bottomBar = {
+                    NavigationBar {
+                        val backStack by bottomNavController.currentBackStackEntryAsState()
+                        val currentRoute = backStack?.destination?.route
+
+                        NavigationBarItem(
+                            selected = currentRoute == Screen.Home::class.qualifiedName,
+                            onClick = {
+                                bottomNavController.navigate(Screen.Home) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            icon = { Icon(Icons.Filled.Home, null) },
+                            label = { Text("Home") }
+                        )
+
+                        NavigationBarItem(
+                            selected = currentRoute == Screen.Profile::class.qualifiedName,
+                            onClick = {
+                                bottomNavController.navigate(Screen.Profile) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            icon = { Icon(Icons.Filled.Person, null) },
+                            label = { Text("Profile") }
+                        )
+
+                        NavigationBarItem(
+                            selected = currentRoute == Screen.Settings::class.qualifiedName,
+                            onClick = {
+                                bottomNavController.navigate(Screen.Settings) {
+                                    launchSingleTop = true
+                                }
+                            },
+                            icon = { Icon(Icons.Filled.Settings, null) },
+                            label = { Text("Settings") }
+                        )
+
+                        if (isAdmin.value) {
+                            NavigationBarItem(
+                                selected = currentRoute == Screen.Admin::class.qualifiedName,
+                                onClick = {
+                                    bottomNavController.navigate(Screen.Admin) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                icon = { Icon(Icons.Filled.AdminPanelSettings, null) },
+                                label = { Text("Admin") }
+                            )
+                        }
+                    }
+                }
+            ) { padding ->
+                NavHost(
+                    navController = bottomNavController,
+                    startDestination = Screen.Home,
+                    modifier = Modifier.padding(padding)
+                ) {
+                    composable<Screen.Home> {
+                        HomeScreen(bottomNavController)
+                    }
+                    composable<Screen.Profile> {
+                        UserProfileScreen()
+                    }
+                    composable<Screen.Settings> {
+                        Text("Settings Screen")
+                    }
+                    composable<Screen.Admin> {
+                        Text("Admin Dashboard")
+                    }
+                }
+            }
         }
     }
 }
