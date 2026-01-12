@@ -25,6 +25,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    /*
     signingConfigs {
         create("default") {
             keyAlias = "Alumni_Directory_App"
@@ -33,6 +34,7 @@ android {
             storePassword = "aaAA11..,,"
         }
     }
+    */
 
     buildTypes {
         release {
@@ -41,12 +43,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("default")
+            // signingConfig = signingConfigs.getByName("default")
         }
 
         debug {
             isDebuggable = true
-            signingConfig = signingConfigs.getByName("default")
+            // signingConfig = signingConfigs.getByName("default")
         }
     }
     compileOptions {
@@ -73,6 +75,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.firebase.firestore)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.navigation.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -101,4 +105,7 @@ dependencies {
     // Image Handling
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+    implementation("com.google.firebase:firebase-auth")
 }
