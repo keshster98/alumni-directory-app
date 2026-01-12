@@ -1,5 +1,7 @@
 package com.keshen.alumni_directory_app.ui.screens.auth
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -7,23 +9,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.keshen.alumni_directory_app.service.AuthService
-import kotlinx.coroutines.launch
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.keshen.alumni_directory_app.core.utils.MessageType
 
 @Composable
 fun SignUpScreen(
-    authService: AuthService,
     onSuccess: () -> Unit,
-    onSignInClick: () -> Unit
+    onSignInClick: () -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
-    val scope = rememberCoroutineScope()
-
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf<String?>(null) }
+
+    val isSigningUp by viewModel.isSigningUp.collectAsState()
+    val message by viewModel.message.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -36,7 +39,6 @@ fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // 🔹 Title
             Text(
                 text = "Sign Up",
                 fontSize = 24.sp,
@@ -49,7 +51,8 @@ fun SignUpScreen(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isSigningUp
             )
 
             Spacer(Modifier.height(12.dp))
@@ -59,56 +62,80 @@ fun SignUpScreen(
                 onValueChange = { password = it },
                 label = { Text("Password") },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isSigningUp
             )
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
                 label = { Text("Confirm Password") },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isSigningUp
             )
 
             Spacer(Modifier.height(20.dp))
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    when {
-                        email.isBlank() || password.isBlank() || confirmPassword.isBlank() -> {
-                            error = "All fields are required"
-                        }
-                        password != confirmPassword -> {
-                            error = "Passwords do not match"
-                        }
-                        else -> {
-                            scope.launch {
-                                runCatching {
-                                    authService.signUp(email, password)
-                                }.onSuccess {
-                                    onSuccess()
-                                }.onFailure {
-                                    error = it.message
-                                }
-                            }
-                        }
-                    }
+            message?.let { uiMessage ->
+                val isError = uiMessage.type == MessageType.ERROR
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = if (isError) Color(0xFFFFEBEE) else Color(0xFFE8F5E9),
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .border(
+                            1.dp,
+                            if (isError) Color(0xFFD32F2F) else Color(0xFF388E3C),
+                            MaterialTheme.shapes.medium
+                        )
+                        .padding(12.dp)
+                ) {
+                    Text(
+                        text = uiMessage.text,
+                        color = if (isError) Color(0xFFD32F2F) else Color(0xFF388E3C),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
-            ) {
-                Text("Sign Up")
+
+                Spacer(Modifier.height(16.dp))
             }
 
-            error?.let {
-                Spacer(Modifier.height(12.dp))
-                Text(it, color = Color.Red)
+            Button(
+                enabled = !isSigningUp,
+                onClick = {
+                    viewModel.signUp(
+                        email = email,
+                        password = password,
+                        confirmPassword = confirmPassword,
+                        onSuccess = onSuccess
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (isSigningUp) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("Sign Up")
+                }
             }
 
             Spacer(Modifier.height(16.dp))
 
-            TextButton(onClick = onSignInClick) {
+            TextButton(
+                enabled = !isSigningUp,
+                onClick = onSignInClick
+            ) {
                 Text("Already have an account? Sign In")
             }
         }

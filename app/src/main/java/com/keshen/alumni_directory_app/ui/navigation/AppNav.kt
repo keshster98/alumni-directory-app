@@ -12,7 +12,6 @@ import com.keshen.alumni_directory_app.ui.screens.auth.SignInScreen
 import com.keshen.alumni_directory_app.ui.screens.auth.SignUpScreen
 import com.keshen.alumni_directory_app.ui.screens.home.HomeScreen
 import com.keshen.alumni_directory_app.ui.screens.profile.AlumniProfileScreen
-import com.keshen.alumni_directory_app.ui.screens.profile.UserProfileScreen
 
 @Composable
 fun AppNav(
@@ -44,8 +43,6 @@ fun AppNav(
 
         composable<Screen.SignIn> {
             SignInScreen(
-                authService = authService,
-                profileService = profileService,
                 onSuccess = { completed ->
                     navController.navigate(
                         if (completed) Screen.Home else Screen.RegistrationForm
@@ -61,7 +58,6 @@ fun AppNav(
 
         composable<Screen.SignUp> {
             SignUpScreen(
-                authService = authService,
                 onSuccess = {
                     navController.navigate(Screen.RegistrationForm) {
                         popUpTo(Screen.SignUp) { inclusive = true }

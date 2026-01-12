@@ -12,36 +12,20 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.keshen.alumni_directory_app.core.utils.MessageType
-import com.keshen.alumni_directory_app.core.utils.UiMessage
-import com.keshen.alumni_directory_app.service.AuthService
-import com.keshen.alumni_directory_app.service.UserProfileService
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 
 @Composable
 fun SignInScreen(
-    authService: AuthService,
-    profileService: UserProfileService,
     onSuccess: (Boolean) -> Unit,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
-    val scope = rememberCoroutineScope()
-
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var nameOrEmail by remember { mutableStateOf("") }
 
-    var isSigningIn by remember { mutableStateOf(false) }
-    var message by remember { mutableStateOf<UiMessage?>(null) }
-
-    // Ensures if there are any UI messages, it only shows on the screen for 2 seconds before disappearing
-    LaunchedEffect(message) {
-        if (message != null) {
-            delay(2000)
-            message = null
-        }
-    }
+    val isSigningIn by viewModel.isSigningIn.collectAsState()
+    val message by viewModel.message.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -65,7 +49,8 @@ fun SignInScreen(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isSigningIn
             )
 
             Spacer(Modifier.height(12.dp))
@@ -75,10 +60,11 @@ fun SignInScreen(
                 onValueChange = { password = it },
                 label = { Text("Password") },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isSigningIn
             )
 
-            Spacer(Modifier.height(21.dp))
+            Spacer(Modifier.height(20.dp))
 
             message?.let { uiMessage ->
                 val isError = uiMessage.type == MessageType.ERROR
@@ -105,55 +91,38 @@ fun SignInScreen(
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
-            }
 
-            Spacer(Modifier.height(20.dp))
+                Spacer(Modifier.height(16.dp))
+            }
 
             Button(
                 enabled = !isSigningIn,
                 onClick = {
-                    message = null
-                    isSigningIn = true
-
-                    if (email.isBlank() || password.isBlank()) {
-                        message = UiMessage(
-                            text = "Email and/or password cannot be empty!",
-                            type = MessageType.ERROR
-                        )
-                        isSigningIn = false
-                        // Prevents scope.launch from running if the fields are empty by terminating the onClick function instantly
-                        return@Button
-                    }
-
-                    scope.launch {
-                        runCatching {
-                            authService.signIn(email, password)
-                            nameOrEmail = profileService.getUserDisplayName(authService.uid(), email)
-                            profileService.isProfileCompleted(authService.uid())
-                        }.onSuccess { completed ->
-                            message = UiMessage(
-                                text = "Success! Signing you in, $nameOrEmail",
-                                type = MessageType.SUCCESS
-                            )
-                            delay(2000)
-                            onSuccess(completed)
-                        }.onFailure {
-                            message = UiMessage(
-                                text = it.message ?: "Something went wrong. Please try again.",
-                                type = MessageType.ERROR
-                            )
-                            isSigningIn = false
-                        }
-                    }
+                    viewModel.signIn(
+                        email = email,
+                        password = password,
+                        onSuccess = onSuccess
+                    )
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Sign In")
+                if (isSigningIn) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("Sign In")
+                }
             }
 
             Spacer(Modifier.height(16.dp))
 
-            TextButton(onClick = onSignUpClick) {
+            TextButton(
+                enabled = !isSigningIn,
+                onClick = onSignUpClick
+            ) {
                 Text("Don't have an account yet? Sign Up")
             }
         }
