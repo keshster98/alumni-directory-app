@@ -3,6 +3,9 @@ package com.keshen.alumni_directory_app.service
 import com.google.firebase.firestore.FirebaseFirestore
 import com.keshen.alumni_directory_app.data.model.Status
 import com.keshen.alumni_directory_app.data.model.User
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class UserProfileService(
@@ -101,9 +104,21 @@ class UserProfileService(
             .toObjects(User::class.java)
     }
 
-    suspend fun isAdmin(uid: String): Boolean {
-        val doc = db.collection("users").document(uid).get().await()
-        return doc.getBoolean("admin") == true
+    // To allow real time isAdmin value changes detection
+    fun observeIsAdmin(uid: String): Flow<Boolean> = callbackFlow {
+        val listener = db.collection("users")
+            .document(uid)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(false)
+                    return@addSnapshotListener
+                }
+
+                val isAdmin = snapshot?.getBoolean("admin") == true
+                trySend(isAdmin)
+            }
+
+        awaitClose { listener.remove() }
     }
 
     suspend fun getUserStatus(uid: String): Status {

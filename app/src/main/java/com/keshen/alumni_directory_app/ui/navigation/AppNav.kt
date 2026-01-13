@@ -19,6 +19,7 @@ import com.keshen.alumni_directory_app.ui.screens.profile.AlumniProfileScreen
 import com.keshen.alumni_directory_app.ui.screens.profile.UserProfileScreen
 import com.keshen.alumni_directory_app.ui.screens.settings.SettingsScreen
 import com.keshen.alumni_directory_app.ui.screens.status.StatusScreen
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppNav(
@@ -26,14 +27,19 @@ fun AppNav(
     profileService: UserProfileService
 ) {
     val rootNavController = rememberNavController()
-    val isAdmin = remember { mutableStateOf(false) }
+    val isAdmin = remember { mutableStateOf<Boolean?>(null) }
 
     LaunchedEffect(Unit) {
         if (authService.isLoggedIn()) {
 
             val uid = authService.uid()
             val completed = profileService.isProfileCompleted(uid)
-            isAdmin.value = profileService.isAdmin(uid)
+
+            launch {
+                profileService.observeIsAdmin(uid).collect { admin ->
+                    isAdmin.value = admin
+                }
+            }
 
             if (!completed) {
                 rootNavController.navigate(Screen.RegistrationForm) {
@@ -179,7 +185,7 @@ fun AppNav(
                             label = { Text("Settings") }
                         )
 
-                        if (isAdmin.value) {
+                        if (isAdmin.value == true) {
                             NavigationBarItem(
                                 selected = currentRoute == Screen.Admin::class.qualifiedName,
                                 onClick = {
